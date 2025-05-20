@@ -15,6 +15,7 @@ Select concat(first_name,' ', last_name) as Full_name
 from users_customuser;
 
 -- After the extraction, I am altering the users_customuser table to have a column named Full_name to occupy the first and last name data
+
 Alter table users_customuser
 Add Full_name varchar(1000);
 
