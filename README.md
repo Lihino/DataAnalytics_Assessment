@@ -133,6 +133,7 @@ from transaction_summary
 group by Frequency_category
 order by Avg_transaction_per_month desc;
 
+### Comment 
 -- The result shows High Frequency with customer count of 141, and Avg transaction monthly of 44.72
 -- The resut show medium frequency with 178 customer count and 4.57 average transaction monthly
 -- The low frequency has the largest customer count with 554 and an avg transaction monthly
@@ -182,6 +183,7 @@ WHERE status_id = 1
   AND (is_fixed_investment = 1 OR is_regular_savings = 1)
 ORDER BY inactivity_days DESC;
 
+### Comment
 -- The reult shows that Cowrywise has active savings accounts with over 500 days of inactivity.
 -- The result also shows there are lots of savings account with inactive days in cowrywise
 -- The result show no Investment accounts with inactive days nor are there any investment accounts that are active.
@@ -247,6 +249,7 @@ and p.start_date is not null
 group by u.id, start_date
 order by estimate_CLV desc;
 
+### Comment
 -- Result shows that Christiana Uzonowanne has the highest estimate Clv
 -- The report shows the Tenure and Total transaction coulumns.
 
