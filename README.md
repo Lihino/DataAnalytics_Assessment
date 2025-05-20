@@ -10,6 +10,7 @@ Task: Write a query to find customers with at least one funded savings plan AND 
 (-- First we check all our extracted data and see where we have to start from.. The users_customuser
 -- has the customer demographics and contact information
 -- So, I am writing a query to extract and transform the first and last name of each customers
+
 Select concat(first_name,' ', last_name) as Full_name
 from users_customuser;
 
@@ -18,35 +19,43 @@ Alter table users_customuser
 Add Full_name varchar(1000);
 
 -- Then, I update the table and Full_name coloumn to have the queried data
+
 update users_customuser
 set Full_name = concat(first_name,' ', last_name);
 
 -- My quick check to know if what I have done works
+
 select Full_name, id
 from users_customuser;
 
 -- A quick check on the plans_plan table
+
 select *
 from plans_plan;
 
 -- On the plans_plan table I am distintifly counting the is_fixed_investment column and the is_regular_savings column and rename it as 
 -- Investment_count and Savings_count respectively grouping it by ownership_id.
+
 select count(distinct is_fixed_investment) as Investment_count, count(distinct is_regular_savings) as Savings_count, owner_id
 from plans_plan
 group by owner_id;
 
 -- A quick check on the savings_savingsaccount table
+
 select *
 from savings_savingsaccount;
 
 -- Using the new_balance column to represent the total deposit in the account of customers, rounded to two decimal points grouping it by the owners_id and sorting it by total deposit the result shows the total deposit by the owners_id
-select round(max(new_balance), 2) as total_deposit, owner_id
+
+select round(max(new_balance), 2) as total_deposit, 
+owner_id
 from savings_savingsaccount
 group by owner_id
 order by total_deposit desc;
 
 
-Select count(distinct new_balance) as Savings, owner_id
+Select count(distinct new_balance) as Savings, 
+owner_id
 from savings_savingsaccount
 group by owner_id
 order by Savings desc
@@ -57,6 +66,7 @@ limit 1;
 -- Select the users table owner_id, users table full_name, plans table Ivestment_count, plans table Savings_count, and the savings table total_deposit column to be represented
 -- representing the users table as u, the plans table as p, and the savings table as s. Join the plans table on the users table using the primary key id column on the plans owner_id
 -- Also left join the savings table on the plans table using the primary key owner_id. Group it all by Owner_id and Full_name Sort ny total_deposit
+
 SELECT 
   u.id AS owner_id,
   u.Full_name,
@@ -72,6 +82,7 @@ order by total_deposit desc
 
 
 -- After joining the tables and getting the required result, it is now time to clean out the null values to have a well cleaned and analysed result.
+
 SELECT 
   u.id AS owner_id,
   u.Full_name,
@@ -145,10 +156,12 @@ Task: Find all active accounts (savings or investments) with no transactions in 
 ### Solution
 
 -- A quick look into the plans table to figure out the coloumns needed which include the plan_id, owner_id, investment column, savings and the last_charge date.
+
 select *
 from plans_plan;
 
 -- Qucik look into the savings table suggest the table is not needed for the querying
+
 select *
 from savings_savingsaccount;
 
@@ -200,19 +213,23 @@ Order by estimated CLV from highest to lowest
 ### Solution
 
 -- A quick look into the users table, we need to select the id and the full name column
+
 Select *
 from users_customuser;
 
 -- Renmae the id column as the Customer_id and select the Full_name from the users table
+
 Select id as customer_id, 
 Full_name
 from users_customuser;
 
 -- Using the plan's table instead of the savings table, the start_date column, amount and owner_id tcoloumn will be selected from the plan's table
+
 select *
 from plans_plan;
 
 -- Calculating the count of the amounts by customers, converting the start_date into months as tenure_month using the timestampdiff
+
 Select owner_id, 
 count(amount) as total_transactions,
 round(avg(amount)* 0.001, 2) as avg_profit_per_transaction,
@@ -221,6 +238,7 @@ from plans_plan
 group by owner_id, start_date;
 
 -- Calculating the Estimate_Customer_lifetime_value by divinging the total amount by the tenure and multplying it by 12 and avg_profit_per_transaction
+
 Select owner_id, 
 count(amount) as total_transactions, 
 round(
